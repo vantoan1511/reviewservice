@@ -9,12 +9,10 @@ import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.Document;
 import org.bson.conversions.Bson;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @ApplicationScoped
 public class ReviewRepository implements PanacheMongoRepository<Review> {
@@ -29,8 +27,12 @@ public class ReviewRepository implements PanacheMongoRepository<Review> {
         return find(filter, sort).page(pageRequest.getPage() - 1, pageRequest.getSize()).list();
     }
 
-    public Optional<Review> findByProductSlug(String productSlug) {
-        return find("productSlug", productSlug).firstResultOptional();
+    public Optional<Review> findByUsernameAndProductSlug(String username, String productSlug) {
+        return findByProductSlug(productSlug).stream().filter(review -> review.getUsername().equals(username)).findFirst();
+    }
+
+    public List<Review> findByProductSlug(String productSlug) {
+        return find("productSlug", productSlug).list();
     }
 
     public long countByCriteria(FilterCriteria filterCriteria) {

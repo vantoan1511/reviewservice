@@ -31,6 +31,12 @@ public class ReviewAPI {
         return Response.ok(reviewService.getPagedReviewByCriteria(filterCriteria, pageRequest, sortCriteria)).build();
     }
 
+    @GET
+    @Path("statistic")
+    public Response getStatistic(@QueryParam("productSlug") String productSlug) {
+        return Response.ok(reviewService.getStatistic(productSlug)).build();
+    }
+
     @POST
     @Authenticated
     public Response create(@Valid CreateReviewRequest createReviewRequest) {
